@@ -1,11 +1,16 @@
 extends Node3D
 
 @onready var caboose_scene = preload("res://caboose.tscn")
-var car_length: float = 20.0
+# Main car body length (must match hull_size.z in caboose)
+var car_body_length: float = 20.0
+# Gap between cars = gangway; space cars so gangway sits in gap (no overlap with preceding car)
+var gangway_length: float = 2.0
+var car_length: float = 20.0  # car_body_length + gangway_length, set in _ready
 var spawn_index: int = 0
 var cars: Array = []
 
 func _ready():
+	car_length = car_body_length + gangway_length
 	for i in range(3):
 		spawn_next_car()
 

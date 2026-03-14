@@ -76,7 +76,7 @@ func _physics_process(delta):
 
 	# Apply gravity; use stronger gravity when falling so jump feels snappier
 	if not is_on_floor():
-		var g := GRAVITY * delta
+		var g: float = GRAVITY * delta
 		if velocity.y < 0.0:
 			g *= FALL_GRAVITY_MULTIPLIER
 		velocity.y -= g
