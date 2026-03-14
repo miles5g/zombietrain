@@ -1,7 +1,11 @@
-[gd_scene format=3 uid="uid://doyy4i4cn7t06"]
+[gd_scene load_steps=6 format=3 uid="uid://doyy4i4cn7t06"]
 
 [ext_resource type="Script" uid="uid://b4by7px2ulil1" path="res://player.gd" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://co2twgj8uttal" path="res://train_manager.gd" id="2_tlwt5"]
+[ext_resource type="PackedScene" uid="uid://c2starter_weapon_ui" path="res://scenes/starter_weapon_ui.tscn" id="3_ui"]
+[ext_resource type="PackedScene" uid="uid://dhud1" path="res://scenes/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" uid="uid://cgangway_shop" path="res://scenes/gangway_shop_ui.tscn" id="5_shop"]
+[ext_resource type="PackedScene" uid="uid://game_over_ui" path="res://scenes/game_over_ui.tscn" id="6_gameover"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fj7yv"]
 
@@ -17,7 +21,7 @@ sky = SubResource("Sky_fj7yv")
 [node name="World" type="Node3D" unique_id=750443894]
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=1867708592]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.1, 5)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.98, 5)
 script = ExtResource("1_f3sb7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=834186773]
@@ -35,3 +39,11 @@ environment = SubResource("Environment_f3sb7")
 
 [node name="TrainManager" type="Node3D" parent="." unique_id=99788651]
 script = ExtResource("2_tlwt5")
+
+[node name="StarterWeaponUI" parent="." instance=ExtResource("3_ui")]
+
+[node name="HUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="GangwayShopUI" parent="." instance=ExtResource("5_shop")]
+
+[node name="GameOverUI" parent="." instance=ExtResource("6_gameover")]

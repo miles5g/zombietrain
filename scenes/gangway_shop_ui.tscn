@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3 uid="uid://cgangway_shop"]
+
+[ext_resource type="Script" path="res://scripts/gangway_shop_ui.gd" id="1_shop"]
+
+[node name="GangwayShopUI" type="CanvasLayer"]
+layer = 15
+script = ExtResource("1_shop")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+layout_mode = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -140.0
+offset_right = 180.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+text = "Gangway Shop"
+
+[node name="Skills" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+
+[node name="DamageBtn" type="Button" parent="CenterContainer/PanelContainer/VBox/Skills"]
+layout_mode = 2
+text = "Damage +10% (Lv 1) - 50 coins"
+
+[node name="HealthBtn" type="Button" parent="CenterContainer/PanelContainer/VBox/Skills"]
+layout_mode = 2
+text = "Health +10 (Lv 1) - 50 coins"
+
+[node name="Weapons" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+
+[node name="WeaponUpgradeBtn" type="Button" parent="CenterContainer/PanelContainer/VBox/Weapons"]
+layout_mode = 2
+text = "Weapon +2 dmg (Lv 1) - 75 coins"
+
+[node name="BuyBrass" type="Button" parent="CenterContainer/PanelContainer/VBox/Weapons"]
+layout_mode = 2
+text = "Buy Brass Knuckles - 100 coins"
+
+[node name="BuyKnife" type="Button" parent="CenterContainer/PanelContainer/VBox/Weapons"]
+layout_mode = 2
+text = "Buy Knife - 100 coins"
+
+[node name="BuyBat" type="Button" parent="CenterContainer/PanelContainer/VBox/Weapons"]
+layout_mode = 2
+text = "Buy Baseball Bat - 100 coins"
+
+[node name="CloseBtn" type="Button" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+text = "Close"
