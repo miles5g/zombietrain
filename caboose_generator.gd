@@ -168,6 +168,26 @@ func _ready() -> void:
 	gw_ceiling.material_override = gw_ceiling_mat
 	add_child(gw_ceiling)
 
+	# Platform above gangway (between cars): walkable deck above the gangway
+	var platform_thickness := 0.15
+	var platform_y := gangway_height - platform_thickness * 0.5
+	var platform_mesh := MeshInstance3D.new()
+	platform_mesh.name = "GangwayPlatform"
+	var platform_box := BoxMesh.new()
+	platform_box.size = Vector3(gangway_width, platform_thickness, gangway_length)
+	platform_mesh.mesh = platform_box
+	platform_mesh.position = Vector3(0, platform_y, gangway_center_z)
+	var platform_mat := StandardMaterial3D.new()
+	platform_mat.albedo_color = Color(0.2, 0.2, 0.22)
+	platform_mat.metallic = 0.2
+	platform_mesh.material_override = platform_mat
+	add_child(platform_mesh)
+	var platform_shape := CollisionShape3D.new()
+	platform_shape.shape = BoxShape3D.new()
+	platform_shape.shape.size = Vector3(gangway_width, platform_thickness, gangway_length)
+	platform_shape.position = Vector3(0, platform_y, gangway_center_z)
+	body.add_child(platform_shape)
+
 	var gw_left_col := CollisionShape3D.new()
 	gw_left_col.shape = BoxShape3D.new()
 	gw_left_col.shape.size = Vector3(gw_wall_depth, gangway_height, gangway_length)
@@ -279,7 +299,7 @@ func _ready() -> void:
 	_window_frames_parent.name = "WindowFrames"
 	add_child(_window_frames_parent)
 
-	# --- Windows: smaller, square, centered on interior wall (well above floor) ---
+	# --- Windows: 2 per side, evenly spaced along length, at car height midpoint (equidistant from floor/ceiling) ---
 	var window_size := Vector3(0.8, 0.8, 1.0)
 	# Caboose space: floor top = floor_thickness; interior center so window sits clearly above floor
 	var interior_height := hull_size.y - floor_thickness - roof_thickness
@@ -287,10 +307,9 @@ func _ready() -> void:
 	# Hull is at (0, hull_size.y*0.5, 0), so hull local y = caboose y - hull_size.y*0.5
 	var window_y_hull_local := window_y_caboose - hull_size.y * 0.5
 
-	# Door and window placement: doors at ends, windows centered strictly on side-wall sections
+	# Door and window placement: doors at ends, windows on side-wall sections
 	var door_width := hull_size.x * 0.33
 	var door_height := hull_size.y * 0.75
-	# Deep enough that the subtraction fully cuts through the end wall (no invisible barrier)
 	var door_thickness := 1.0
 	var z_offset := (hull_size.z / 2.0) - (door_thickness * 0.5)
 
@@ -300,14 +319,11 @@ func _ready() -> void:
 	var door_center_y := door_bottom + door_height * 0.5
 	var door_size := Vector3(door_width, door_height, door_thickness)
 
-	# Space windows well away from doors so they sit on the main side-wall sections
 	var door_edge_buffer := 2.2
 	var side_zone_start := -hull_size.z * 0.5 + door_thickness + door_edge_buffer + window_size.z * 0.5
 	var side_zone_end := hull_size.z * 0.5 - door_thickness - door_edge_buffer - window_size.z * 0.5
 	var side_zone_length := side_zone_end - side_zone_start
-	var num_windows_per_side := 3
-	if side_zone_length >= window_size.z * 3.5:
-		num_windows_per_side = 4
+	var num_windows_per_side := 2  # 2 windows evenly spaced on each side
 
 	# Window frame: visible dark metal/wood so the opening reads clearly
 	var frame_mat := StandardMaterial3D.new()
@@ -332,7 +348,7 @@ func _ready() -> void:
 	for side in [-1, 1]:
 		var x_offset := (hull_size.x * 0.5) - (wall_thickness * 0.5)
 		for i in range(num_windows_per_side):
-			var t := float(i) / (num_windows_per_side - 1) if num_windows_per_side > 1 else 0.5
+			var t := (float(i) + 1.0) / (num_windows_per_side + 1.0)  # 1/3 and 2/3 along zone
 			var window_z := lerpf(side_zone_start, side_zone_end, t)
 			var window := CSGBox3D.new()
 			window.size = window_size
