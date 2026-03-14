@@ -1,0 +1,1 @@
+extends CSGCombiner3D

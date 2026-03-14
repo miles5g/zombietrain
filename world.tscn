@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://doyy4i4cn7t06"]
+
+[ext_resource type="Script" uid="uid://b4by7px2ulil1" path="res://player.gd" id="1_f3sb7"]
+[ext_resource type="Script" uid="uid://co2twgj8uttal" path="res://train_manager.gd" id="2_tlwt5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f3sb7"]
+albedo_color = Color(0.42042378, 0.23126245, 0.04872697, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_fj7yv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
+
+[sub_resource type="Sky" id="Sky_fj7yv"]
+sky_material = SubResource("ProceduralSkyMaterial_f3sb7")
+
+[sub_resource type="Environment" id="Environment_f3sb7"]
+background_mode = 2
+sky = SubResource("Sky_fj7yv")
+
+[node name="World" type="Node3D" unique_id=750443894]
+
+[node name="Floor" type="CSGBox3D" parent="." unique_id=580582366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.020446777, 0.04840088, -0.016113281)
+use_collision = true
+size = Vector3(10, 0.5, 20)
+material = SubResource("StandardMaterial3D_f3sb7")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1867708592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 5)
+script = ExtResource("1_f3sb7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=834186773]
+shape = SubResource("CapsuleShape3D_fj7yv")
+
+[node name="Camera3D" type="Camera3D" parent="Player" unique_id=1963952690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3608809, 0)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=396894670]
+transform = Transform3D(0.70710677, -0.49999997, 0.49999997, 0, 0.70710677, 0.70710677, -0.70710677, -0.49999997, 0.49999997, 0, 6, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1207631035]
+environment = SubResource("Environment_f3sb7")
+
+[node name="TrainManager" type="Node3D" parent="." unique_id=99788651]
+script = ExtResource("2_tlwt5")

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://brjxjhtx1jt54"]
+
+[ext_resource type="Script" uid="uid://cd4esfxrlnjhd" path="res://caboose_generator.gd" id="1_i00te"]
+
+[node name="Caboose" type="CSGCombiner3D" unique_id=204256657]
+use_collision = true
+script = ExtResource("1_i00te")
