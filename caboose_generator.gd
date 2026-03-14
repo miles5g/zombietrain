@@ -5,28 +5,31 @@ signal player_reached_door
 # --- Car Dimensions ---
 var hull_size := Vector3(6.0, 4.0, 20.0) # (width, height, length)
 var wall_thickness := 0.2
+# Thicker roof so player doesn't clip through; must be >= wall_thickness and aligned with CSG
+var roof_thickness := 0.4
 
 func _ready() -> void:
 	# --- Hull (Outer Shell) ---
 	var hull := CSGBox3D.new()
+	hull.name = "Hull"
 	hull.size = hull_size
 	hull.position = Vector3(0, hull_size.y * 0.5, 0) # so floor sits at y=0
-	hull.use_collision = true
+	hull.use_collision = true  # required so hull (and floor/roof) block the player
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(0.13, 0.13, 0.16) # Slightly lighter than before (not 100% black)
 	hull.material = mat
 	add_child(hull)
 
 	# --- Interior Subtraction (hollowing out except for floor & roof) ---
-	var interior_size = Vector3(
-		hull_size.x - wall_thickness * 2,
-		hull_size.y - wall_thickness * 2,
-		hull_size.z - wall_thickness * 2
+	# Use exact centered math so there are no ghost holes in the collision
+	var interior_size := Vector3(
+		hull_size.x - wall_thickness * 2.0,
+		hull_size.y - wall_thickness * 2.0,
+		hull_size.z - wall_thickness * 2.0
 	)
 	var interior := CSGBox3D.new()
 	interior.size = interior_size
-	# Place so floor & roof have equal thickness:
-	interior.position = Vector3(0, hull_size.y * 0.5, 0) 
+	interior.position = Vector3(0, hull_size.y * 0.5, 0)  # same center as hull = symmetric floor/roof
 	interior.operation = CSGShape3D.OPERATION_SUBTRACTION
 
 	# --- Interior Material (Dark Gray, not black) ---
@@ -36,28 +39,29 @@ func _ready() -> void:
 
 	hull.add_child(interior)
 	
-	# --- Add Roof (as a separate mesh/box) ---
+	# --- Add Roof (thicker than wall to prevent player clipping) ---
+	var roof_center_y := hull_size.y - roof_thickness * 0.5
 	var roof := MeshInstance3D.new()
 	var roof_mesh := BoxMesh.new()
-	roof_mesh.size = Vector3(hull_size.x, wall_thickness, hull_size.z)
+	roof_mesh.size = Vector3(hull_size.x, roof_thickness, hull_size.z)
 	roof.mesh = roof_mesh
-	roof.position = Vector3(0, hull_size.y - (wall_thickness * 0.5), 0)
+	roof.position = Vector3(0, roof_center_y, 0)
 	var roof_mat := StandardMaterial3D.new()
 	roof_mat.albedo_color = Color(0.13, 0.13, 0.15)
 	roof.material_override = roof_mat
 	add_child(roof)
-	# Give roof collision
+	# Roof collision: same thickness and position as mesh so no gaps
 	var roof_collision := CollisionShape3D.new()
 	roof_collision.shape = BoxShape3D.new()
-	roof_collision.shape.size = Vector3(hull_size.x, wall_thickness, hull_size.z)
-	roof_collision.position = Vector3(0, hull_size.y - (wall_thickness * 0.5), 0)
+	roof_collision.shape.size = Vector3(hull_size.x, roof_thickness, hull_size.z)
+	roof_collision.position = Vector3(0, roof_center_y, 0)
 	add_child(roof_collision)
-	
+
 	# --- Interior Lighting (OmniLight at ceiling center) ---
 	var ceiling_light := OmniLight3D.new()
 	ceiling_light.light_energy = 1.5
 	ceiling_light.omni_range = 15.0
-	ceiling_light.position = Vector3(0, hull_size.y - wall_thickness - 0.2, 0)
+	ceiling_light.position = Vector3(0, hull_size.y - roof_thickness - 0.2, 0)
 	add_child(ceiling_light)
 
 	# --- Windows (side cutouts), spaced along Z, at 'eye level', avoiding doors ---
