@@ -1,8 +1,6 @@
-# Train Hole
+# Rail Survivor
 
-**First-person zombie train survivor** — fight through procedurally generated train cars, board up windows, earn coins, and upgrade gear in the gangway shop between waves.
-
-> **Note:** An earlier prototype lives in [zombietrain](https://github.com/miles5g/zombietrain). This repo is the current Godot 4.6 version with expanded systems.
+**First-person endless-rail survivor** — fight through procedurally generated train cars, board up windows, earn coins, and upgrade gear in the gangway shop between waves.
 
 ## Highlights
 
@@ -40,20 +38,14 @@
 | **Q** | Swap weapons |
 | **R** (hold) | Add window barrier (costs coins) |
 
-## Project layout
-
-```
-train-hole/
-├── world.tscn
-├── scripts/           # Player, zombies, game state, weapons
-├── scenes/
-└── project.godot
-```
-
 ## Status
 
 Playable prototype — core loop, shop, and procedural cars are in; polish and content ongoing.
 
+## Author
+
+Miles Johnson — [@miles5g](https://github.com/miles5g)
+
 ## License
 
-MIT (see repository license if present).
+MIT
